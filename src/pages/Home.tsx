@@ -1,26 +1,74 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import {
+  IonBackButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonRow,
+  IonButton,
+  withIonLifeCycle,
+  IonText,
+} from '@ionic/react';
 import React from 'react';
+import axios from 'axios';
 
-const Home: React.FC = () => {
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Ionic Blank</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding">
-        The world is your oyster.
-        <p>
-          If you get lost, the{' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/">
-            docs
-          </a>{' '}
-          will be your guide.
-        </p>
-      </IonContent>
-    </IonPage>
-  );
-};
+class Home extends React.Component {
+  constructor(props: Home) {
+    super(props);
+    this.state = {
+      data: '',
+    };
+  }
 
-export default Home;
+  ionViewWillEnter() {
+    console.log('ionViewWillEnter event fired');
+
+  }
+
+  ionViewWillLeave() {
+    console.log('ionViewWillLeave event fired');
+  }
+
+  ionViewDidEnter() {
+    console.log('ionViewWillEnter event fired');
+    axios.get("http://bigmac-product.canvas-works.info/api/v1/get_purpose/")
+      .then(res => {
+        console.log(res.data.dataList[0].body);
+        this.setState({data: res.data.dataList[0].body});
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
+  ionViewDidLeave() {
+    console.log('ionViewDidLeave event fired');
+  }
+
+  render() {
+    return (
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonBackButton />
+            </IonButtons>
+            <IonTitle>Trang chủ</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonRow className="container">
+          <IonText>aaa</IonText>
+          <IonButton href="/re" color="secondary">
+            Đặt hàng
+          </IonButton>
+          </IonRow>
+        </IonContent>
+      </IonPage>
+    );
+  }
+}
+
+export default withIonLifeCycle(Home);
